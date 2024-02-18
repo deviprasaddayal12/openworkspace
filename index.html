@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Open WorkSpace</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  </head>
+  <body>
+    <script>
+      // Set up scene
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Define cubicle geometry
+      const cubicleGeometry = new THREE.BoxGeometry(4, 2, 4);
+      const cubicleMaterial = new THREE.MeshBasicMaterial({ color: 0xcccccc });
+      const cubicleMesh = new THREE.Mesh(cubicleGeometry, cubicleMaterial);
+
+      // Position and add cubicles to the scene
+      const cubicleCount = 10;
+      const cubicleSpacing = 5;
+      const cubicleStartX = -cubicleSpacing * (cubicleCount / 2);
+      const cubicleStartZ = -cubicleSpacing * (cubicleCount / 2);
+
+      for (let i = 0; i < cubicleCount; i++) {
+        for (let j = 0; j < cubicleCount; j++) {
+          const cubicle = cubicleMesh.clone();
+          cubicle.position.x = cubicleStartX + i * cubicleSpacing;
+          cubicle.position.z = cubicleStartZ + j * cubicleSpacing;
+          scene.add(cubicle);
+        }
+      }
+
+      // Add lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+      scene.add(ambientLight);
+
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+      directionalLight.position.set(1, 1, 0);
+      scene.add(directionalLight);
+
+      // Add camera
+      camera.position.y = 10;
+      camera.position.z = 20;
+
+      // Render loop
+      function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+      }
+      animate();
+    </script>
+  </body>
+</html>
